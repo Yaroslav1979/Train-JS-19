@@ -17,14 +17,30 @@
  */
 
 // Створюємо об'єкт Book
+     let Book = {        
+        title: "Загальна Книга",
+        author: "Анонім",
+        pages: '0',
+        read() {
+            console.log (`Ви читаєте ${this.title} від ${this.author}`);
+        }, 
+    };
 
 console.log("Завдання: 1 ==============================");
+console.log(Book);
+let protBook = Object.create(Book);
+
+console.log(Book.isPrototypeOf(protBook));
+
+Book.read();
 
 // Виводимо в консоль Об'єкт: Book
 
 // Виводимо в консоль прототип Об'єкту: Book
 
 // Викликаємо функцію read об'єкту Book
+
+
 
 // 2. Наслідування від базового об'єкту Book
 
@@ -37,14 +53,16 @@ console.log("Завдання: 1 ==============================");
  *  | genre       | "Новела" |
  */
 
+let Novel = Object.create(Book);
 // Створюємо об'єкт Novel, наслідуємо властивості і функції від об'єкта Book
-
+Novel.genre =  "Новела";
 // Додаємо властивість genre
 
 console.log("Завдання: 2 ==============================");
+console.log(Novel);
 
 // Виводимо в консоль Об'єкт: Novel
-
+console.log(Object.getPrototypeOf(Novel));
 // Виводимо в консоль прототип Об'єкту: Novel
 
 // 3. Створення нового об'єкту та зміна його прототипу
@@ -61,12 +79,19 @@ console.log("Завдання: 2 ==============================");
  */
 
 // Створюємо об'єкт Biography
+let Biography = {        
+    title: "Загальна Біографія",
+    author: "Біограф",
+    pages: '200',   
+};
 
 // Змінемо прототип об'єкта Biography на Novel
+Object.setPrototypeOf(Biography, Novel)
 
 console.log("Завдання: 3 ==============================");
+console.log(Biography);
 // Виводимо в консоль Об'єкт: Biography
-
+console.log(Novel.isPrototypeOf(Biography));
 // Перевіримо чи являється Novel прототипом Biography та виведемо в консоль
 
 // 4. Інкапсуляція властивості та додання властивості
@@ -75,8 +100,21 @@ console.log("Завдання: 3 ==============================");
  * Властивості та функції наслідуються від об'єкта Book
  * Також тут використовується інкапсуляція для створення властивості 'info', яка не може бути змінена напряму, а лише змінюється за допомогю гетера
  */
-
+let ScienceBook = Object.create(Book);
+let info; 
 // Створюємо ScienceBook, наслідуємо властивості і функції від об'єкта Book
+Object.defineProperty(ScienceBook, 'info', { 
+    
+    set(newInfo) {
+        info = newInfo;
+    },
+    get() {
+        return `Про книгу ${this.title}: ${info}`;
+    },
+  
+   enumerable: false,
+    configurable: false,
+});
 
 // Додаємо властивість 'info' за допомогою Object.defineProperty
 // Зробимо щоб 'info' не можно було видалити або змінити, перевіримо і спробуємо присвоїти ій будь яке значення (це потрібно робити ззовні defineProperty),
@@ -87,6 +125,9 @@ console.log("Завдання: 3 ==============================");
 // Створимо гетер який буде нам повертати рядок: Про книгу <title>: <info>
 // тепер все виводить коректно
 
+ScienceBook.title = "Фізика 101";
+ScienceBook.author = "Альберт Ейнштейн";
+ScienceBook.info = "написана в 1915 році";
 // Заповнюємо об'єкт
 // | Властивість | Значення             |
 // |-------------|----------------------|
@@ -97,6 +138,9 @@ console.log("Завдання: 3 ==============================");
 console.log("Завдання: 4 ==============================");
 // Виводимо в консоль властивість info
 
+console.log(ScienceBook.info);
+
+console.log(Object.getOwnPropertyDescriptor(ScienceBook, 'info'));
 // Виводимо в консоль налаштування властивости info
 
 // 5. Поліморфізм: створення нового об'єкта та перевизначення його методу
